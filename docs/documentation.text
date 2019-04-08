@@ -1,0 +1,411 @@
+//
+//  documentation.text
+//  OS
+//
+//  Created by Mohd Shoaib Rayeen on 10/02/19.
+//  Copyright © 2019 Shoaib Rayeen. All rights reserved.
+//
+
+
+A BUffer contains 4 pointers , one block Number and one status bit.
+For Status Bit,
+
+ for status ->  LSB Bit No  ||      Status          ||  Decimal Value if bit is set
+                    1st     ->  locked/busy         ->          1
+                    2nd     ->  unlocked/free       ->          2
+                    3rd     ->  delayed-write       ->          4
+                    4th     ->  Valid Data          ->          8
+
+Multiple Processes can access buffer at Same Time.
+For A block, If buffer is needed for write, then only delayed-write case is possible.
+
+Note:
+- Synchonization is used for Modifying A Buffer by A Process at a time.
+- The Block Number could be Any Integer Number.
+- Initially, There could be any number of Buffers defined by user.
+- Why Block is needed for the entered process is asked to user.  If user ask it for write, then only delayed write case is possible.
+- At A time 4 Processes Can Run.
+
+
+To Run The Program By Console -
+    For Compiling - g++ getblk.cpp -std=c++11 -o getblk
+    For Executing - ./getblk
+
+
+
+
+Function Name : display()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : displaying current buffer cache
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  It goes through each heads and prints it's details
+     
+     ------------------------------------------------------------------------------------------------
+
+
+
+Function Name : init()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : initializing a new node
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : New Node after Initialization
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Assigning all pointers as NULL
+     
+     ------------------------------------------------------------------------------------------------
+     
+
+Function name : insertAtFreeList() 
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Insertion at Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : value to be inserted in Free List
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Insertion at End in Free List
+     
+     ------------------------------------------------------------------------------------------------
+
+Function name : insertAtHashQueue()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Insertion in respective Buffer Pool
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+                    temp:   Node which has to be inserted in Buffer cache
+                    value:  Block Number for the buffer
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Insertion at the end of respective buffer cache
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : deleteFromFreeList()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : deleting Node from Free List from Front
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : Deleted Node
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Assigning Null to Pointer and if Buffer is in any Node, removing its link
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : removeFromFreeList()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : removing Link from Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+                    temp: Node which needs to remove its links.
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Assigning Null to both freeList Pointers
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : getblk()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Assigning a block from buffer to a process
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :  tempBlockNumber : block number of buffer to be allocated
+                        status : buffer is used for read or write.
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Steps for getblk();
+                    1. Searching given block number in Buffer Cache
+                    2. If found , check buffer is busy or not.
+                    3. If Buffer is busy, then Process goes to indefinite sleep
+                    4. If Buffer is not busy, Buffer is given to repective Process and raised a signal
+                        to wake up all waiting processes if required
+                    5. If Not Found, then Check Free List
+                    6. If Free List is Empty, Wait for a Process to Add Buffer in Free List
+                    7. If First Node in Free List is marked as Delayed-Write, Asynchronous Write to Disk.
+                    8. Reassigning A node from Free List to Process
+     
+     
+     ------------------------------------------------------------------------------------------------
+Function name : search()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : searching a Node in Buffer Cache
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+     tempBlockNumber: Block Number which has to be search
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : Node if Found , otherwise NULL
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Calculating Index from Block Number and then Linear Searching from its head
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : freeListEmpty()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : Adding one Node to Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :  None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Randomly Assigning One Node from Buffer Cache to Free List
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : brelse()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : Releasing A node and adding it to Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+     temp: Node which has to be released.
+     status: Buffer is used for read or write
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  if buffer is used for read , add it to end of free list otherwise add it to Beginning
+                    of free list
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : insertAtbegining()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Insertion at Beginning in Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+     temp: Node which has to be inserted.
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  If Free List is NULL, Modifying head and tail , Otherwise modifying Head
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : insertAtEnding()
+
+     ------------------------------------------------------------------------------------------------
+     
+     objective : Insertion at End in Free List
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :
+     temp: Node which has to be inserted.
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  If Free List is NULL, Modifying head and tail , Otherwise modifying Tail
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : diskWrite()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : Writing to dist
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  removing its link from Free List and inserting at its end after writing
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : waits()
+     ------------------------------------------------------------------------------------------------
+     
+     objective : Sending a process to wait state until another process sends it signal to wake it up
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Using conditional variable and Mutex Lock
+     
+     ------------------------------------------------------------------------------------------------
+
+
+
+Function name : signals()
+------------------------------------------------------------------------------------------------
+     
+     objective : Sending All process signal to wake up
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Using conditional variable and Mutex Lock
+     
+     ------------------------------------------------------------------------------------------------
+
+
+
+
+Function name : lock()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : locking subsequent instructions
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : Locked Object
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Using Mutex Lock
+     
+     ------------------------------------------------------------------------------------------------
+
+
+Function name : unlock()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Unlocking subsequent instructions
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : UNlocked Object
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Using Mutex Lock
+     
+     ------------------------------------------------------------------------------------------------
+
+
+
+
+Function name : getblk()
+    ------------------------------------------------------------------------------------------------
+     
+     objective : Assigning a block from buffer to a process
+     
+     ------------------------------------------------------------------------------------------------
+     input parameter :  tempBlockNumber : block number of buffer to be allocated
+                        status : buffer is used for read or write.
+     
+     ------------------------------------------------------------------------------------------------
+     
+     output parameter : None
+     
+     ------------------------------------------------------------------------------------------------
+     
+     approach    :  Steps for getblk();
+                    1. Searching given block number in Buffer Cache
+                    2. If found , check buffer is busy or not.
+                    3. If Buffer is busy, then Process goes to indefinite sleep
+                    4. If Buffer is not busy, Buffer is given to repective Process and raised a signal
+                        to wake up all waiting processes if required
+                    5. If Not Found, then Check Free List
+                    6. If Free List is Empty, Wait for a Process to Add Buffer in Free List
+                    7. If First Node in Free List is marked as Delayed-Write, Asynchronous Write to Disk.
+                    8. Reassigning A node from Free List to Process
+     
+     
+     ------------------------------------------------------------------------------------------------
