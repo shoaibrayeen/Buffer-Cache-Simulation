@@ -1,6 +1,6 @@
 
 //
-//  main.cpp
+//  getblk.h
 //  OS
 //
 //  Created by Mohd Shoaib Rayeen on 10/02/19.
