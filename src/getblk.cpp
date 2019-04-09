@@ -1,3 +1,11 @@
+//
+//  getblk.cpp
+//  OS
+//
+//  Created by Mohd Shoaib Rayeen on 10/02/19.
+//  Copyright © 2019 Shoaib Rayeen. All rights reserved.
+//
+
 #include "getblk.h"
 
 void display() {
