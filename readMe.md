@@ -17,9 +17,9 @@
 ##   Contribution and Learning Experience:
 	Contribution: Algorithm is implemented by myself.
 	Learning:  1)	Learnt about Multithreading and MultiProcessing
-		      2)   Different ways to implement it - Client-Server, Multithreading, Shared-Memory etc.
-		      3)   Learnt about Synchronisation among Threads
-		      4)	Learnt about Signals and waits in C++
+		   2)   Different ways to implement it - Client-Server, Multithreading, Shared-Memory etc.
+		   3)   Learnt about Synchronisation among Threads
+		   4)	Learnt about Signals and waits in C++
           
           
           
