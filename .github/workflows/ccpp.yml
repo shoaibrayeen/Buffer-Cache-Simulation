@@ -1,11 +1,7 @@
 name: C/C++ CI
 
 on: 
-   push:
-            paths:
-               - '**.cpp'
-            branches:
-               - master
+   push
 jobs:
    build:
 
