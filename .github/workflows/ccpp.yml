@@ -1,11 +1,13 @@
 name: C/C++ CI
 
 on: 
-   push
+   push:
+      paths:
+         - '**.cpp'
 jobs:
    build:
 
-     runs-on: ubuntu-latest
+     runs-on: macOS-latest
      steps:
      - name: checkout repo
        uses: actions/checkout@v1
