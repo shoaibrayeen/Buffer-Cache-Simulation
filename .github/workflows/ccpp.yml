@@ -1,9 +1,11 @@
 name: C/C++ CI
 
 on: 
-   pull_request:
+   push:
             paths:
                - '**.cpp'
+            branches:
+               - master
 jobs:
    build:
 
